@@ -1,6 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import 'dotenv/config.js';
+import { Readable } from 'stream';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,7 +49,6 @@ app.get('/api/v1/proxy', async (req, res) => {
       res.set('Content-Length', contentLength);
     }
 
-    const { Readable } = require('stream');
     const stream = Readable.fromWeb(response.body);
     
     stream.on('error', (err) => {
@@ -189,6 +189,12 @@ app.post('/api/v1/downloads/prepare', async (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});
+import { fileURLToPath } from 'url';
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+export default app;
